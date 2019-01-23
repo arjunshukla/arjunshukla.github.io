@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <title>CME Tool</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+    <script src='http://code.jquery.com/jquery.js'></script>
+</head>
+
+<body>
+
+    <div class='container'>
+
+        <h2>CME Questions Creation Tool</h2>
+
+        <p><strong>Step 1: </strong>Enter info about the CME in the 'CME' tab</p>
+        <p><strong>Step 2: </strong>Create Questions for the lecture</p>
+        <p><strong>Step 3: </strong>'Download' the CME info and questions JSON files</p>
+        <p><strong>Step 4: </strong>Send both the JSON files for upload</p>
+
+        <div id='errorAlertBox' class='alert alert-danger alert-dismissable fade in'>
+            <!-- <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> -->
+            <p id='errorMessage'><strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.</p>
+        </div>
+
+        <ul class='nav nav-tabs'>
+            <li class='active'><a data-toggle='pill' href='#cme'>CME</a></li>
+            <li><a data-toggle='pill' href='#questions' id='linkToQuestionsTab'>Questions</a></li>
+        </ul>
+
+        <div class='tab-content'>
+            <div id='cme' class='tab-pane fade in active'>
+                <h3>Enter CME Lecture Info</h3>
+
+                <div class='form-group'>
+                    <label for='txtLectureName'>Lecture Name:</label>
+                    <input type='text' class='form-control' placeholder='Lecture Name' id='txtLectureName' required/>
+                </div>
+
+                <div class='form-group'>
+                    <label for='txtTeacherName'>Teacher Name:</label>
+                    <input type='text' class='form-control' placeholder='Teacher Name' id='txtTeacherName' required/>
+                </div>
+
+                <label for='txtTeacherName'>Lecture Description:</label>
+                <textarea class='form-control' rows='5' placeholder='Lecture Description' id='txtLectureDescription' required></textarea>
+
+                <div class='row'>
+
+                    <div class='col-md-9'>
+                        <p>Click on 'Next' to create questions. Incase you want to change something here, you can always come
+                            back to this screen by clicking on the 'CME' tab above.</p>
+                        <a type='button' class='btn btn-success' onClick='onNextBtnClick()'>Next</a>
+                    </div>
+                    <div class='col-md-3'>
+                        <p>Click on 'Recover Data' to recover any previously created questions which you couldn't save but wish
+                            to continue with.</p>
+                        <a type='button' class='btn btn-warning' onClick='recoverData()'>Recover Data</a>
+                    </div>
+                </div>
+                <!-- <a data-toggle='pill' href='#questions'>Questions</a> -->
+
+            </div>
+            <div id='questions' class='tab-pane fade'>
+                <h3>Create Questions</h3>
+                <p>Atleast 2 options are required.</p>
+                <p><strong>Note:</strong> Out of sequence answer options will be discarded.</p>
+
+
+                <form>
+                    <div class='form-group'>
+                        <label for='txtQuestionText'>Enter Question:</label>
+                        <textarea class='form-control' rows='5' placeholder='Questions text...' id='txtQuestionText' required></textarea><br>
+
+                        <label for='txtAnswerChoice1'>Answer Choice A:</label>
+                        <input type='text' class='form-control' placeholder='Option A' id='txtAnswerChoice1' required/>
+
+                        <label for='txtAnswerChoice2'>Answer Choice B:</label>
+                        <input type='text' class='form-control' placeholder='Option B' id='txtAnswerChoice2' required/>
+
+                        <label for='txtAnswerChoice3'>Answer Choice C:</label>
+                        <input type='text' class='form-control' placeholder='Option C' id='txtAnswerChoice3' />
+
+                        <label for='txtAnswerChoice4'>Answer Choice D:</label>
+                        <input type='text' class='form-control' placeholder='Option D' id='txtAnswerChoice4' />
+
+                        <label for='txtAnswerChoice5'>Answer Choice E:</label>
+                        <input type='text' class='form-control' placeholder='Option E' id='txtAnswerChoice5' />
+
+                        <label for='txtAnswerChoice6'>Answer Choice F:</label>
+                        <input type='text' class='form-control' placeholder='Option F' id='txtAnswerChoice6' />
+
+                        <label for='txtCorrectAnswerChoice'>Enter Correct Answer choice:</label>
+                        <!-- <input type='text' class='form-control' placeholder='Correct Answer' id='txtAnswerChoice6' /> -->
+                        <!-- <select class='form-control' id='txtCorrectAnswerChoice' onchange='validCorrectAnswer()'> -->
+                        <select class='form-control' id='txtCorrectAnswerChoice'>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                                <option>D</option>
+                                <option>E</option>
+                                <option>F</option>
+                              </select>
+
+                        <!-- <label for='attachmentType'>Select attachment type:</label><br>
+                        <select class='form-control' id='attachmentType'>
+                            <option>none</option>
+                            <option>image</option>
+                            <option>audio</option>
+                            <option>video</option>
+                            <option>pdf</option>
+                        </select>
+                        
+                        <br>
+
+                        <span class='btn btn-default btn-file'>
+                            Browse <input type='file'>
+                        </span> -->
+
+                    </div>
+
+                    <div class='row'>
+                        <label>Click 'Add &amp; Next' button to add this Question to list and move to creating next question or click 'Download &amp; End' to finish creating questions for this lecture and download the files.</label>
+                        <div class='col-md-6'>
+                            <button type='button' class='btn btn-success' onclick='addQuestion()'>Add &amp; Next</button>
+                        </div>
+                        <div class='col-md-6'>
+                            <button type='button' class='btn btn-success' onclick='downloadAndEnd()'>Download &amp; End</button>
+                            <p><strong>Note: </strong>Clicking this will save the currently entered question.</p>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- <br><label>Add this Question to list</label> -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var CMETopicJSON = {};
+        var arrQuestions = [];
+        var arrOptions = [0, 'A', 'B', 'C', 'D', 'E', 'F'];
+        var arrAnswers = [];
+        var saveOperation = 'save';
+        var readOperation = 'read';
+        var questionsKey = 'questions';
+        var CMEInfoKey = 'cme';
+
+
+        initLoad();
+        function initLoad() {
+            $('#errorAlertBox').hide();
+        }
+
+        function validCMEInfo() {
+            if (document.getElementById('txtLectureName').value && document.getElementById('txtTeacherName').value && document.getElementById('txtLectureDescription').value) {
+                return true;
+            }
+            showAlertWithMessage('Please enter data in all fields');
+            return false;
+        }
+
+        function validQuestion() {
+            if (document.getElementById('txtQuestionText').value &&
+                document.getElementById('txtAnswerChoice1').value &&
+                document.getElementById('txtAnswerChoice2').value && validCorrectAnswer()) {
+                return true;
+            } else {
+                showAlertWithMessage('Cannot create question! Valid question needs atleast 2 options and valid correct answer choice selection');
+                arrAnswers = [];
+                return false;
+            }
+        }
+
+        function validCorrectAnswer() {
+            $('#errorAlertBox').hide();
+            getAnswerOptions();
+            var selectedAnswer = document.getElementById('txtCorrectAnswerChoice').value;
+            if (arrAnswers.some(item => item.choice === selectedAnswer)) {
+                switch (selectedAnswer) {
+                    case 'A':
+                        if (!document.getElementById('txtAnswerChoice1').value) {
+                            showAlertWithMessage('No answer in option A');
+                            return false;
+                        }
+                        break;
+                    case 'B':
+                        if (!document.getElementById('txtAnswerChoice2').value) {
+                            showAlertWithMessage('No answer in option B');
+                            return false;
+                        }
+                        break;
+                    case 'C':
+                        if (!document.getElementById('txtAnswerChoice3').value) {
+                            showAlertWithMessage('No answer in option C');
+                            return false;
+                        }
+                        break;
+                    case 'D':
+                        if (!document.getElementById('txtAnswerChoice4').value) {
+                            showAlertWithMessage('No answer in option D');
+                            return false;
+                        }
+                        break;
+                    case 'E':
+                        if (!document.getElementById('txtAnswerChoice5').value) {
+                            showAlertWithMessage('No answer in option E');
+                            return false;
+                        }
+                        break;
+                    case 'F':
+                        if (!document.getElementById('txtAnswerChoice6').value) {
+                            showAlertWithMessage('No answer in option F');
+                            return false;
+                        }
+                        break;
+                    default:
+                        showAlertWithMessage('Please enter valid answer options');
+                        return false;
+                }
+            } else {
+                showAlertWithMessage('Invalid answer option sequence and correct answer selection.');
+                return false;
+            }
+            return true;
+        }
+
+        function showAlertWithMessage(message) {
+            document.getElementById('errorMessage').innerHTML = '<strong>Error!</strong> ' + message;
+            $('#errorAlertBox').show();
+        }
+
+        function onNextBtnClick() {
+            if (validCMEInfo()) {
+                CMETopicJSON = {
+                    'topic_uri': document.getElementById('txtLectureName').value,
+                    'topic': document.getElementById('txtLectureName').value,
+                    'provider': 'Drbeen Corp',
+                    'coach': document.getElementById('txtTeacherName').value,
+                    "credits": "1",
+                    "contact-hours": "1",
+                    'offer-date': getMonthString(),
+                    'description': document.getElementById('txtLectureDescription').value,
+                    'available': true
+                }
+                accessLocalStorage(saveOperation, CMEInfoKey, CMETopicJSON);
+                document.getElementById('linkToQuestionsTab').click();
+                $('#errorAlertBox').hide();
+            }
+        }
+
+        function getMonthString() {
+            var arrMonthString = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var date = new Date();
+            return (arrMonthString[date.getMonth()] + ' ' + date.getFullYear()).toString();
+        }
+
+        function getAnswerOptions() {
+            for (var i = 1; i < 7; i++) {
+                if (document.getElementById('txtAnswerChoice' + i).value) {
+                    arrAnswers.push({
+                        "choice": arrOptions[i],
+                        "answer": getAnswerText(arrOptions[i])
+                    });
+                } else {
+                    break;
+                }
+            }
+            return arrAnswers;
+        }
+
+        function getAnswerText(option) {
+            switch (option) {
+                case 'A':
+                    return document.getElementById('txtAnswerChoice1').value;
+                    break;
+                case 'B':
+                    return document.getElementById('txtAnswerChoice2').value;
+                    break;
+                case 'C':
+                    return document.getElementById('txtAnswerChoice3').value;
+                    break;
+                case 'D':
+                    return document.getElementById('txtAnswerChoice4').value;
+                    break;
+                case 'E':
+                    return document.getElementById('txtAnswerChoice5').value;
+                    break;
+                case 'F':
+                    return document.getElementById('txtAnswerChoice6').value;
+                    break;
+                default:
+                    return '';
+
+            }
+        }
+
+        function getCorrectAnswerChoice() {
+
+            // arrAnswers.forEach(function(element) {
+            //     if (element.c .indexOf(document.getElementById('txtCorrectAnswerChoice').value) > 0) {
+            //     return true;
+            // }
+            // return false;    
+            // }, this);()
+
+
+        }
+
+        function addQuestion() {
+            // getAnswerOptions();
+            if (validQuestion()) {
+                arrQuestions.push(
+                    {
+                        'module_id': document.getElementById('txtLectureName').value,
+                        'text': document.getElementById('txtQuestionText').value,
+                        'answers': arrAnswers,
+                        'attribute': {
+                            'answer_choice': document.getElementById('txtCorrectAnswerChoice').value,// this should be in answers array ,
+                            'answer_text': getAnswerText(document.getElementById('txtCorrectAnswerChoice').value),
+                            'isActive': 'true',
+                            'type': 'MULTI',
+                            'difficulty': 'MEDIUM',
+                            'month': getMonthString()
+                        }
+                    });
+                // Add questions array to local storage
+                accessLocalStorage(saveOperation, questionsKey, arrQuestions);
+                newQuestion();
+            }
+        }
+
+        function accessLocalStorage(operation, key, value) {
+            $('#errorAlertBox').hide();
+            // Check browser support
+            if (typeof (Storage) !== "undefined") {
+                if (operation === 'save') {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else if (operation === 'read') {
+                    return JSON.parse(localStorage.getItem(key));
+                } else {
+                    showAlertWithMessage('Please pass \'save\' to store; or \'read\' to access sotred object');
+                }
+            } else {
+                showAlertWithMessage('Sorry, your browser does not support Web browser Local Storage...');
+            }
+        }
+
+        function newQuestion() {
+            document.getElementById('txtQuestionText').value = '';
+            document.getElementById('txtAnswerChoice1').value = '';
+            document.getElementById('txtAnswerChoice2').value = '';
+            document.getElementById('txtAnswerChoice3').value = '';
+            document.getElementById('txtAnswerChoice4').value = '';
+            document.getElementById('txtAnswerChoice5').value = '';
+            document.getElementById('txtAnswerChoice6').value = '';
+            $("#txtCorrectAnswerChoice")[0].selectedIndex = 0;
+            arrAnswers = [];
+            // document.getElementById('txt').value = '';
+        }
+
+        function getQuestionsList() {
+            var questionsString = '';
+
+            arrQuestions.forEach(function (element) {
+                if (questionsString === '') {
+                    questionsString = JSON.stringify(element);
+                } else {
+                    questionsString = questionsString + ',' + JSON.stringify(element);
+                }
+            }, this);
+
+            // var patt = /\\/
+
+            var res = questionsString.replace(/\\\\/g, '');
+            console.log(res);
+            return res;
+        }
+
+
+        function newLecture() {
+
+        }
+
+        function downloadAndEnd() {
+
+            /***** Steps to finish creating questions and download files:
+                    1. Add entered question to list adding quest - done
+                    2. Create JSON object for CME topic - done
+                    3. Create JSON object for questions - done
+                    4. Dowload both JSON files - done
+                    5. Reload page to refresh memory and move to CME tab to enter next CME lecture details - pending
+            */
+
+            addQuestion();
+            downloadCMEInfo(JSON.stringify(
+                accessLocalStorage(readOperation, CMEInfoKey, null), null, 2));
+
+            downlaodQuestions(JSON.stringify(
+                accessLocalStorage(readOperation, questionsKey, null), null, 2));
+        }
+
+        function downloadCMEInfo(cmeJSON) {
+            var blob = new Blob([cmeJSON], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+
+            var a = document.createElement('a');
+            a.download = document.getElementById('txtLectureName').value + '_topic.json';
+            a.href = url;
+            a.textContent = 'Download both JSONs';
+            a.click();
+            // document.getElementById('cme').appendChild(a);
+        }
+
+        function downlaodQuestions(jsonData) {
+            jsonData = jsonData.substring(1, jsonData.length - 1);
+            var blob = new Blob([jsonData], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.download = document.getElementById('txtLectureName').value + '_questions.json';
+            a.href = url;
+            a.textContent = 'Download backup.json';
+            a.click();
+        }
+
+
+        function recoverData() {
+            CMETopicJSON = accessLocalStorage(readOperation, CMEInfoKey, null);
+            document.getElementById('txtLectureName').value = CMETopicJSON.topic;
+            document.getElementById('txtTeacherName').value = CMETopicJSON.coach;
+            document.getElementById('txtLectureDescription').value = CMETopicJSON.description;
+
+            // setTimeout(function(){
+            onNextBtnClick();
+            arrQuestions = accessLocalStorage(readOperation, questionsKey, null);
+            // }, 1000);
+        }
+
+
+
+        /*
+        1. Add counter for no of questions added
+        2. Add CME tab validation for Add Question button
+        3. Refresh page on Download and End click to reset session
+        4. Test for special characters in CME, Question and Answers JSON/Arrays
+        5. Add auto-dismissing mesage toast for success events like question added, download completed, reset session, etc.
+        6. Add local storage for savings questions incase Juveria looses power
+        */
+    </script>
+
+</body>
+
+</html>
