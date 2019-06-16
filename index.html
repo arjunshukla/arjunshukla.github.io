@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<header>
+</header>
+<body>
+<label>Module ID</label>
+<br>
+<textarea id="module_id" rows="1" cols="150">Liver Function Tests and Interpretation</textarea>
+<br>
+<button onclick="clearAll()">Clear All</button>
+<br>
+<label>Question</label>
+<br>
+<textarea id="text" rows="6" cols="150"></textarea>
+<br>
+<label>Answer Choice A</label>
+<br>
+<textarea id="A" rows="3" cols="150"></textarea>
+<br>
+<label>Answer Choice B</label>
+<br>
+<textarea id="B" rows="3" cols="150"></textarea>
+<br>
+<label>Answer Choice C</label>
+<br>
+<textarea id="C" rows="3" cols="150"></textarea>
+<br>
+<label>Answer Choice D</label>
+<br>
+<textarea id="D" rows="3" cols="150"></textarea>
+<br>
+<label>Answer Choice E</label>
+<br>
+<textarea id="E" rows="3" cols="150"></textarea>
+<br>
+<label>Correct Choice</label>
+<br>
+<textarea id="answer" rows="3" cols="150"></textarea>
+<br>
+<button onclick="myFunction()">Generate JSON</button>
+<br>
+<label id="status">Nothing to report</label>
+<br>
+<textarea id="output" rows="30" cols="150">Empty</textarea>
+
+<script>
+    function clearAll(){
+        document.getElementById("text").value = "";
+        document.getElementById("A").value = "";
+        document.getElementById("B").value = "";
+        document.getElementById("C").value = "";
+        document.getElementById("D").value = "";
+        document.getElementById("E").value = "";
+        document.getElementById("answer").value = "";
+        document.getElementById("output").value = "";
+
+    }
+    function myFunction() {
+        if(document.getElementById("answer").value)
+        {
+            document.getElementById("status").innerHTML = "Please indicate";
+        }
+        else{
+            document.getElementById("status").innerHTML = "Please indicate the correct answer choice";
+            return;
+        }
+        document.getElementById("status").value = "";
+
+        var result = document.getElementById("output");
+        result.value = "";
+        result.value = "{\n";
+
+        result.value += "\"module_id\": ";
+        result.value += "\"" + document.getElementById("module_id").value + "\", \n";
+
+        result.value += "\"text\": ";
+        result.value += "\"" + document.getElementById("text").value + "\", \n";
+
+        result.value += "\"answers\": [\n";
+
+        if(document.getElementById("A").value){
+            result.value += "{\n";
+            result.value += "\"choice\": \"A\", \n";
+            result.value += "\"answer\": ";
+            result.value += "\"" + document.getElementById("A").value + "\" \n";
+            result.value += "}";
+        }
+
+        if(document.getElementById("B").value){
+            result.value += ",\n";
+            result.value += "{\n";
+            result.value += "\"choice\": \"B\", \n";
+            result.value += "\"answer\": ";
+            result.value += "\"" + document.getElementById("B").value + "\" \n";
+            result.value += "}\n";
+        }
+        else{
+            result.value += "\n";
+        }
+
+        if(document.getElementById("C").value){
+            result.value += ",\n";
+            result.value += "{\n";
+            result.value += "\"choice\": \"C\", \n";
+            result.value += "\"answer\": ";
+            result.value += "\"" + document.getElementById("C").value + "\" \n";
+            result.value += "}\n";
+        }
+        else{
+            result.value += "\n";
+        }
+
+        if(document.getElementById("D").value){
+            result.value += ",\n";
+            result.value += "{\n";
+            result.value += "\"choice\": \"D\", \n";
+            result.value += "\"answer\": ";
+            result.value += "\"" + document.getElementById("D").value + "\" \n";
+            result.value += "}\n";
+        }
+        else{
+            result.value += "\n";
+        }
+
+        if(document.getElementById("E").value){
+            result.value += ",\n";
+            result.value += "{\n";
+            result.value += "\"choice\": \"E\", \n";
+            result.value += "\"answer\": ";
+            result.value += "\"" + document.getElementById("E").value + "\" \n";
+            result.value += "}\n";
+        }
+        else{
+            result.value += "\n";
+        }
+        result.value += "],\n";
+        result.value += "\"attribute\": {\n";
+
+        result.value += "\"answer_choice\": ";
+        result.value += "\"" + document.getElementById("answer").value  + "\", \n";
+        result.value += "\"answer_text\": ";
+        result.value += "\"" + document.getElementById(document.getElementById("answer").value).value + "\", \n";
+        result.value += "\"isActive\": \"true\", \n";
+        result.value += "\"type\": \"MULTI\", \n";
+        result.value += "\"difficulty\": \"MEDIUM\", \n";
+        result.value += "\"month\": \"August 2016\" \n";
+        result.value += "}\n";
+        result.value += "}\n";
+
+        document.getElementById("status").value = "Success";
+
+    }
+</script>
+
+</body>
+</html>
